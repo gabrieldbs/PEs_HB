@@ -17,7 +17,6 @@ Free_Energy=Free_Energy +xmHplusbeta+xmOHminbeta
 Free_Energy=Free_Energy +packconst-0.5*chi*(Ma*xmAbeta+MB*xmBbeta)**2-xmAbeta*Ma*faspol_A_beta
 Free_Energy=Free_Energy -0.5*xmAbeta*Ma*fHB_A_beta
 
-
 elib=Free_Energy
 
 

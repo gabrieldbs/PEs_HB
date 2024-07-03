@@ -76,7 +76,6 @@ read(8,*) pHbulk
 read(8, *) basura13
 read(8, *) chi  ! cutoff for3porr sv interaction in lattice sites
 
-
 read(8,*) basura14
 read(8,*) justone ! solves only one point
 

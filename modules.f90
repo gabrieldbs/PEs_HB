@@ -30,7 +30,7 @@ real*8 xNaalpha,xmNaalpha,xmNabeta, xmNaalphatot
 real*8 n_totalpha, n_totbeta
 real*8 xmNaalphainitial
 real*8 xClalpha,xClbeta,xmClalpha,xmClbeta
-real*8 xmohminalpha,xmohminbeta,xmhplusalpha,xmhplusbeta
+real*16 xmohminalpha,xmohminbeta,xmhplusalpha,xmhplusbeta
 real*8 xsolventalpha,xsolventbeta
 real*8 xmsolventalpha,xmsolventbeta
 real*8 xAalpha,xAbeta,xBalpha,xBbeta
@@ -47,8 +47,7 @@ integer ncsal
 real*16 K0ANa,K0BCl
 real*16 pKaA
 real*16 pkaB
-real*8 xsolbulk,xmphisolv,xmphipos,xmphineg
-real*8 xmphiOHmin,xmphiHplus
+real*8 xmphiOHmin,xmphiHplus,xsolbulk
 real*8 fA_HB_alphainitial,xmhplusbetainitial,xmohminbetainitial
 endmodule
 

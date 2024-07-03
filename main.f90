@@ -65,66 +65,26 @@ KBCl=10**(-pKBCl)
 
 !xposbulk=phi_sal  !NUEVO
 !xnegbulk=phi_sal  !NUEVO
-print*,' pKHB ,pKD,pKANa,pKBCl ,Ma,Mb,pkaA,pkaB'
+!print*,' pKHB ,pKD,pKANa,pKBCl ,Ma,Mb,pkaA,pkaB'
 
-print*, pKHB ,pKD,pKANa,pKBCl ,Ma,Mb,pKaA,pKaB
+!print*, pKHB ,pKD,pKANa,pKBCl ,Ma,Mb,pKaA,pKaB
 
-print*,'pkaA pKaB',pkAa,pkaB
+!print*,'pkaA pKaB',pkAa,pkaB
 
-print*,'vpol',vpol,'vsol',vsol,'vneg',vsal
-
-print*,' pKD' ,pKD,' pkHB' ,pkHB
+!print*,'vpol',vpol,'vsol',vsol,'vneg',vsal
+!
+!print*,' pKD' ,pKD,' pkHB' ,pkHB
 
 xHplusbulk = (cHplusbulk*Na/(1.0d24))*(vs)
 xOHminbulk = (cOHminbulk*Na/(1.0d24))*(vs)
 
-xmHplusalpha=xHplusbulk
-xmOHminalpha=xOHminbulk
- ! do isal = 1, ncsal ! loop in csal
-
- ! csal = csalini + (csalfin-csalini)/float(ncsal-1)*float(i-1)
-
-
- ! xsalt=csal*vsal*vs*6.02/10.0
-
-  ! if(pHbulk.le.7) then  ! pH<= 7
-  !   xposbulk=xsalt
-  !   xnegbulk= xsalt +(xHplusbulk -xOHminbulk)*vsal! NaCl+ HCl  
-  !! else                  ! pH >7 
-  !   xposbulk=xsalt +(xOHminbulk -xHplusbulk)*vsal ! NaCl+ NaOH   
-  !   xnegbulk=xsalt
-  ! endif
-
-! Concentration of free anf paired Na+ and Cl- in bulk reference
-
-!  rhoNa = xposbulk/vs
-!  rhoCl = xnegbulk/vs
-
-!  aa = 1.
-!  bb = -1.*(rhoNa+rhoCl+1./Ksal/vs)
-!  cc = rhoNa*rhoCl
-
-!  rhoNaCl = ((-bb - sqrt(bb**2 - 4.*aa*cc))/(2.0*aa))
-
-!  rhoNa = rhoNa - rhoNaCl
-!  rhoCl = rhoCl - rhoNaCl
-
-!  print*, rhoNa*rhoCl/rhoNaCl
-
-!  xposbulk = rhoNa*vs
-!  xnegbulk = rhoCl*vs
-!  xNaClbulk = rhoNaCl*2.*vs
-
-!  print*, '!!!!', xposbulk, xnegbulk, xNaClbulk
-!  print*, '$$$$', (xposbulk/vs)*(xnegbulk/vs)/(xNaClbulk/2.0/vs), Ksal
-
-!  if(xNaClbulk.lt.0.0)cycle ! if negative, go to next salt concentration
-!!!!!
+fhb_A_alpha=0
+fhb_a_beta=0
 
   xsolbulk=1.0 -xHplusbulk -xOHminbulk! - xnegbulk -xposbulk! -xNaClbulk
 
-  K0ANa = (KANa)*(xsolbulk**vpos/vsol/(Na/1.0d24)) ! thermodynamic constants
-  K0BCl = (KBCL)*(xsolbulk**vneg/vsol/(Na/1.0d24))
+  K0ANa = (KANa)*(xsolbulk**(vpos/vsol)/(Na/1.0d24)) ! thermodynamic constants
+  K0BCl = (KBCL)*(xsolbulk**(vneg/vsol)/(Na/1.0d24))
   K0D = (KD)*(Na/1.0d24)
   K0HB = (KHB)*(Na/1.0d24)
   K0A = (KA*vs/xsolbulk)*(Na/1.0d24)! intrinstic equilibruim constant 
@@ -132,11 +92,8 @@ xmOHminalpha=xOHminbulk
  
   xmsolventalpha=xsolbulk
   xmsolventbeta=xsolbulk
-!  expmupos=xposbulk/xsolbulk**vsal
-!  expmuneg=xnegbulk/xsolbulk**vsal
   expmuHplus=xHplusbulk/xsolbulk ! vHplus=vsol
   expmuOHmin=xOHminbulk/xsolbulk ! vOHminus=vsol
-  
   do j=1, npasosratioalpha  ! loop over ratio Pol-A/PolB en  alpha
  
     logratioalpha = (logratioalphaf-logratioalphai)*float(j-1)/float(npasosratioalpha) + logratioalphai
@@ -152,7 +109,6 @@ xmOHminalpha=xOHminbulk
       xmAalpha = 10**(logxmAalpha)
 
       iter=0
-      print*,'yes'
       call solve
 
      enddo ! j
