@@ -59,8 +59,6 @@ xSolventbeta=1-exp(x1(4))*Ma*vp*vsol-exp(x1(5))*Mb*vp*vsol-exp(x1(6))*vneg*vsol-
 xSolventbeta=xSolventbeta/(1+expmuHplus+expmuOhmin)
 xmSolventbeta=xSolventbeta/vs
 
-fhb_A_alpha=0
-fhb_A_beta=0
 !print*,'Na_alfa', 'n_tot_alfa', 'EO/Na alfa', 'Na_beta-Na_alpha', 'n_tot_beta', 'EO/Na beta'
 call call_kinsol(x1, x1g, ier)
 
@@ -81,11 +79,13 @@ print*,'out:beta',exp(x1(4)),exp(x1(5)),exp(x1(6)),exp(x1(7))!,exp(x1(8)),exp(x1
 !if ((norma.lt.criterio).and.( checkresults.gt.tolerancia)) then ! encuentra solucion
 if (norma.lt.criterio) then ! encuentra solucion
 !print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes'
-print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
+!print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
 print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
 !print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
 !stop
 write(8000,*) exp(x1(1)),exp(x1(2)),exp(x1(3)), exp(x1(4)), exp(x1(5)),exp(x1(6)),exp(x1(7)),xmAalpha ,pKD,ratioalpha
+write(8001,*) conver,testconst_hb,testconst_as,conver_B,testconst_hb_b,testconst_as_B
+
     print*,'Grid Point OK',yes
     if(justone.eq.1)call endall
 
@@ -116,16 +116,21 @@ write(8000,*) exp(x1(1)),exp(x1(2)),exp(x1(3)), exp(x1(4)), exp(x1(5)),exp(x1(6)
       yes=yes+1 ! counter of sucessful solutions
 
       write(9999,*)yes, xmsolventalpha,xmsolventbeta,xmClalpha, xmClbeta
-      write(9998,*)yes,faspol_a_alpha, fAspol_A_alpha, fasio_B_alpha,fasio_A_alpha
+      write(9998,*)yes,faspol_a_alpha, fAspol_B_alpha, fasio_B_alpha,fasio_A_alpha
       write(9997,*)yes,faspol_B_beta, fAspol_A_beta, fasio_B_beta,fasio_A_beta
       write(9996,*)yes, xmNaalpha,xmNabeta, xmNaalpha-xmNabeta
       write(9995,*)yes, packconst, neutralconst
 
       write(9994,*)yes, fch_a_alpha, funas_A_alpha, fch_B_alpha,funas_b_alpha
       write(9993,*)yes, fch_a_beta, funas_A_beta, fch_B_beta,funas_b_beta
+      write(9990,*)yes,testconst_as,testconst_hb
+      write(9992,*)yes, fhb_a_alpha, fhb_a_beta      
+      write(9991,*)yes, fhb_a_alpha+fch_a_alpha+funas_A_alpha+faspol_a_alpha+fasio_A_alpha,&
+        fhb_a_beta+fch_a_beta+funas_A_BETa+faspol_a_BETa+fasio_A_beta,&
+        fch_b_alpha+funas_b_alpha+faspol_b_alpha+fasio_b_alpha,&
+        fch_b_beta+funas_b_BETa+faspol_b_BETa+fasio_b_beta
 
-
-      arrayaddedNaCl(yes)=xmaddedNaCl/Na*1.d24
+      arrayaddedNaCl(yes)=xmaddedNaCl/Na*1.d24 !*vsol*vpos !/Na*1.d24
   
 
       arraymNa(1,yes)=xmNaalpha/Na*1.d24
@@ -137,6 +142,9 @@ write(8000,*) exp(x1(1)),exp(x1(2)),exp(x1(3)), exp(x1(4)), exp(x1(5)),exp(x1(6)
       arraymcsal(1,yes)=arraymNa(1,yes)+arraymCl(1,yes) ! salt can be calculated from Cl- only
       arraymcsal(2,yes)=arraymNa(2,yes)+arraymCl(2,yes)
 
+      arraycsal(1,yes)=(arraymNa(1,yes)+arraymCl(1,yes))*vsol ! salt can be calculated from Cl- only
+      arraycsal(2,yes)=(arraymNa(2,yes)+arraymCl(2,yes))*vsol
+
       arraymA(1,yes)=MA*xmAalpha/Na*1.e24 ! in units of molar monomers 
       arraymA(2,yes)=MA*xmAbeta/Na*1.e24
 
@@ -146,12 +154,9 @@ write(8000,*) exp(x1(1)),exp(x1(2)),exp(x1(3)), exp(x1(4)), exp(x1(5)),exp(x1(6)
       arraympoltot(1,yes)=arraymA(1,yes)+arraymB(1,yes)
       arraympoltot(2,yes)=arraymA(2,yes)+arraymB(2,yes)
 
-      arraypoltot(1,yes)=(arraymA(1,yes)+arraymB(1,yes))*vpol*vsol
-      arraypoltot(2,yes)=(arraymA(2,yes)+arraymB(2,yes))*vpol*vsol
-
-      arraycsal(1,yes)=(arraymNa(1,yes)+arraymCl(1,yes))*vneg*vsol ! salt can be calculated from Cl- only
-      arraycsal(2,yes)=(arraymNa(2,yes)+arraymCl(2,yes))*vneg*vsol
-      
+      arraypoltot(1,yes)=(arraymA(1,yes)+arraymB(1,yes))
+      arraypoltot(2,yes)=(arraymA(2,yes)+arraymB(2,yes))
+     
 
       arrayratioBA(1,yes)=arraymB(1,yes)/arraymA(1,yes)
       arrayratioBA(2,yes)=arraymB(2,yes)/arraymA(2,yes)

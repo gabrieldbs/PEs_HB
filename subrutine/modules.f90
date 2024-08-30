@@ -57,7 +57,7 @@ real*8 faspol_A_alpha,fasio_A_alpha,funas_A_alpha
 real*8 faspol_B_alpha,fasio_B_alpha,funas_B_alpha
 real*8 faspol_A_beta,fasio_A_beta,funas_A_beta
 real*8 faspol_B_beta,fasio_B_beta,funas_B_beta
-
+real*8 testconst_as, testconst_hb,testconst_as_B, testconst_hb_b
 real*8 fHB_A_alpha,fHB_A_beta
 real*8 fch_A_alpha,fch_A_beta
 real*8 fch_B_alpha,fch_B_beta
@@ -65,7 +65,6 @@ real*8 neutralconstalpha, neutralconstbeta
 real*8 packconst,neutralconst
 real*8 arraympoltot(2,100000)
 real*8 arraymcsal(2,100000)
-
 real*8 arraypoltot(2,100000)
 real*8 arraycsal(2,100000)
 
@@ -75,7 +74,7 @@ real*8 arraymCl(2,100000)
 real*8 arraymA(2,100000)
 real*8 arraymB(2,100000)
 real*8 arrayratioBA(2,100000)
-
+integer conver,conver_b
 integer cont
 endmodule
 

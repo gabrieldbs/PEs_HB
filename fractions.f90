@@ -40,10 +40,10 @@ xmOHmin=xmphisolv*expmuOHmin
 !poner en las notas las constantes auxiliares  explicitamente 
 betaA=K0A*xmphiSolv/xmHplus ! ec 17 con *
 betaB=K0B*xmphiSolv/xmOHmin ! ec 20 con **
-!alphaA=(vsal*(xmphisolv*vsol)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29  diferencia con löas notas  termino de lasal en el paquint 
-!alphaB=(vsal*(xmphisolv*vsol)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    chequeae qu combiene 
-alphaA=(vsal*(1.0)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29  diferencia con löas notas  termino de lasal en el paquint 
-alphaB=(vsal*(1.0)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    chequeae qu combiene 
+alphaA=(vsal*(xmphisolv*vsol)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29  diferencia con löas notas  termino de lasal en el paquint 
+alphaB=(vsal*(xmphisolv*vsol)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    chequeae qu combiene 
+!alphaA=(vsal*(1.0)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29  diferencia con löas notas  termino de lasal en el paquint 
+!alphaB=(vsal*(1.0)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    chequeae qu combiene 
 
 
 deltaA = 1/(alphaA+alphaA/betaA+1)  !page 74  exbottles 

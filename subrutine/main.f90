@@ -13,7 +13,7 @@ real*8 logxmAalpha
 real*8 logratioalpha
 real*8 xposbulk,xnegbulk,xHplusbulk,xOHminbulk,Kw,xsalt
 real*8 pKw,KAinput,Kbind,KBinput,KANainput,KBClinput,kte
-real*8 kbcl,KANa
+real*8 kbcl,KANa,DA
 integer k, kk, kkk
 integer kkkk, kkkkk,kkkkkk
 
@@ -26,8 +26,6 @@ vaa=1.
 vab=1.
 vpol=vpolcero/vsol
 vneg=4./3.*pi*rsal**3/vsol !volume of anion in units of vsol
-vpos=vneg
-vsal=vpos
 yes=0 ! es para  chequear si encuentra o no xalpha, xbeta
 
 
@@ -38,8 +36,8 @@ cOHminbulk=10**(-pOHbulk)
 cHplusbulk=10**(-pHbulk)
 
 vp=vpol!
-!vsal=vsol/vsol! Test
-!vpos=vsal
+vsal=vneg!vsol/vsol! Test
+vpos=vsal
 !vneg=vsal
 
 do k=1,pKDp
@@ -135,17 +133,18 @@ do iii=1,yes
    write (3,*) arraympoltot(1,iii), arraymcsal(1,iii)
 end do
 
+open (unit=4,file='csal_poltot_mol_beta.txt',status='replace')
+
+do iii=1,yes
+   write (4,*) arraympoltot(2,iii), arraymcsal(2,iii)
+end do
+
+
 open (unit=31,file='csal_poltot_volfra_alpha.txt',status='replace')
 
 do iii=1,yes
    write (31,*) arraypoltot(1,iii), arraycsal(1,iii)
 end do
-
-open (unit=4,file='csal_poltot_mol_beta.txt',status='replace')
-
-do iii=1,yes
-   write (4,*) arraympoltot(2,iii), arraymcsal(2,iii)
-end do 
 
 open (unit=41,file='csal_poltot_volfra_beta.txt',status='replace')
 
@@ -194,7 +193,7 @@ end do
 open (unit=600,file='polA_addedNa_alpha.txt',status='replace')
 
 do iii=1,yes
-   write (600,*) arraymA(1,iii), arrayaddedNaCl(iii)
+   write (600,*) arraymA(1,iii)+arraymB(1,iii), arrayaddedNaCl(iii)
 end do
 
 

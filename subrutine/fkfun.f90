@@ -112,11 +112,11 @@ fHB_A_beta=vectfrac(9)
 
 
 xSolventalpha=1. -Ma*vpol*vsol*xmAalpha -Mb*vpol*vsol*xmBalpha&
-!-fasio_A_alpha*Ma*xmAalpha*vpos*vsol-fasio_B_alpha*Mb*xmBalpha*vneg*vsol&
+-fasio_A_alpha*Ma*xmAalpha*vpos*vsol-fasio_B_alpha*Mb*xmBalpha*vneg*vsol&
 -xmNaalpha*vpos*vsol -xmClalpha*vneg*vsol-(xmhplusalpha+xmohminalpha)*vsol
 
 xSolventbeta=1. - Ma*vpol*vsol*xmAbeta  -Mb*vpol*vsol*xmBbeta&
-!-fasio_A_beta*Ma*xmAbeta*vpos*vsol-fasio_B_beta*Mb*xmBbeta*vneg*vsol&
+-fasio_A_beta*Ma*xmAbeta*vpos*vsol-fasio_B_beta*Mb*xmBbeta*vneg*vsol&
 -xmNabeta*vpos*vsol -xmClbeta*vneg*vsol-(xmhplusbeta+xmohminbeta)*vsol
 
 xmSolventalpha=xSolventalpha/vsol
