@@ -44,13 +44,13 @@ read(8, *)  basura4! rsal
 read(8, *)  rsal !
 
 read(8, *)  basura5
-read(8, *)  logratioalphai, logratioalphaf, npasosratioalpha  !  scan total monomer density in molar
+read(8, *)  logratioi, logratiof, npasosratio  !  ratio
 
 !read(8, *) basura5
 !read(8, *) csalini,csalfin,ncsal  ! salt concentration in bulk (Molar)
 
 read(8, *)  basura6
-read(8, *)  logxmAalphai, logxmAalphaf, npasosxmAalpha   ! scan ratio monomer density
+read(8, *)  logxtoti, logxtotf, npasosxtot   ! scan polA  monomer density
 !
 read(8, *)  basura7
 read(8, *)  pKDi, pKDf, pKDp     ! polymer-polymer attraction strenght in kBT
@@ -82,6 +82,6 @@ read(8,*) justone ! solves only one point
 read(8, *) basura15
 read(8, * ) xmBalphainitial,xmNaalphainitial,xmClalphainitial, &
             xmAbetainitial,xmBbetainitial, xmNabetainitial,xmClbetainitial ,  &
-            xmHplusbetainitial,xmOHminbetainitial,fA_HB_alphainitial! read initial guess in the same order as output, ratio and xmtot in alpha are not solved for, so the result is stores in basura
+            xmHplusbetainitial,xmOHminbetainitial ! read initial guess in the same order as output, ratio and xmtot in alpha are not solved for, so the result is stores in basura
 
 end subroutine

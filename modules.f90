@@ -22,9 +22,9 @@ integer pKAp,pKBp,pkDp,pkHBp,pkANap,pkBclp
 real*8 Mai, Maf, Mbi, Mbf
 integer Map, Mbp
 real*8 K0A, K0B,K0D,Ka,KB,Kd,K0HB,KHB
-real*8 logratioalphai, logratioalphaf, logxmAalphai,logxmAalphaf
-real*8 xmaddedNaCl
-integer npasosxmAalpha, npasosratioalpha 
+real*8 logratioi, logratiof, logxtoti,logxtotf,xmxtot,logxmtot,logratio
+real*8 xmaddedNaCl,ratiopol
+integer npasosxtot, npasosratio 
 real*8 cNaplus,cClmin
 real*8 xNaalpha,xmNaalpha,xmNabeta, xmNaalphatot
 real*8 n_totalpha, n_totbeta
@@ -49,6 +49,7 @@ real*16 pKaA
 real*16 pkaB
 real*8 xmphiOHmin,xmphiHplus,xsolbulk
 real*8 fA_HB_alphainitial,xmhplusbetainitial,xmohminbetainitial
+real*8 test_H_OH,testkna,testkcl
 endmodule
 
 module results
@@ -57,7 +58,7 @@ real*8 faspol_A_alpha,fasio_A_alpha,funas_A_alpha
 real*8 faspol_B_alpha,fasio_B_alpha,funas_B_alpha
 real*8 faspol_A_beta,fasio_A_beta,funas_A_beta
 real*8 faspol_B_beta,fasio_B_beta,funas_B_beta
-
+real*8 testconst_as, testconst_hb,testconst_as_B, testconst_hb_b
 real*8 fHB_A_alpha,fHB_A_beta
 real*8 fch_A_alpha,fch_A_beta
 real*8 fch_B_alpha,fch_B_beta
@@ -65,7 +66,6 @@ real*8 neutralconstalpha, neutralconstbeta
 real*8 packconst,neutralconst
 real*8 arraympoltot(2,100000)
 real*8 arraymcsal(2,100000)
-
 real*8 arraypoltot(2,100000)
 real*8 arraycsal(2,100000)
 
@@ -75,7 +75,7 @@ real*8 arraymCl(2,100000)
 real*8 arraymA(2,100000)
 real*8 arraymB(2,100000)
 real*8 arrayratioBA(2,100000)
-
+integer conver,conver_b
 integer cont
 endmodule
 

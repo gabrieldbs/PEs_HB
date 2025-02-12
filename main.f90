@@ -13,7 +13,7 @@ real*8 logxmAalpha
 real*8 logratioalpha
 real*8 xposbulk,xnegbulk,xHplusbulk,xOHminbulk,Kw,xsalt
 real*8 pKw,KAinput,Kbind,KBinput,KANainput,KBClinput,kte
-real*8 kbcl,KANa
+real*8 kbcl,KANa,DA
 integer k, kk, kkk
 integer kkkk, kkkkk,kkkkkk
 
@@ -21,13 +21,14 @@ print*, ' HB_PEsolution GIT Version: ', _VERSION
 
 call readinput ! read input from file
 call allocation
+
+!!! Initial
 vs=vsol
 vaa=1.
 vab=1.
 vpol=vpolcero/vsol
-vneg=4./3.*pi*rsal**3/vsol !volume of anion in units of vsol
-vpos=vneg
-vsal=vpos
+vneg=4./3.*pi*rsal**3/vsol !
+!vneg=vsol/vsol!4./3.*pi*rsal**3/vsol !volume of anion in units of vsol
 yes=0 ! es para  chequear si encuentra o no xalpha, xbeta
 
 
@@ -38,9 +39,11 @@ cOHminbulk=10**(-pOHbulk)
 cHplusbulk=10**(-pHbulk)
 
 vp=vpol!
-!vsal=vsol/vsol! Test
-!vpos=vsal
+vsal=vneg!vsol/vsol! Test
+vpos=vsal
 !vneg=vsal
+
+!! barrido de constantes
 
 do k=1,pKDp
 do kk=1,pKANap
@@ -79,11 +82,8 @@ KBCl=10**(-pKBCl)
 
 xHplusbulk = (cHplusbulk*Na/(1.0d24))*(vs)
 xOHminbulk = (cOHminbulk*Na/(1.0d24))*(vs)
+xsolbulk=1.0 -xHplusbulk -xOHminbulk! - xnegbulk -xposbulk! -xNaClbulk !!?
 
-fhb_A_alpha=0
-fhb_a_beta=0
-
-  xsolbulk=1.0 -xHplusbulk -xOHminbulk! - xnegbulk -xposbulk! -xNaClbulk
 
   K0ANa = (KANa)*(xsolbulk**(vpos/vsol)/(Na/1.0d24)) ! thermodynamic constants
   K0BCl = (KBCL)*(xsolbulk**(vneg/vsol)/(Na/1.0d24))
@@ -94,22 +94,22 @@ fhb_a_beta=0
  
   xmsolventalpha=xsolbulk
   xmsolventbeta=xsolbulk
+
   expmuHplus=xHplusbulk/xsolbulk ! vHplus=vsol
   expmuOHmin=xOHminbulk/xsolbulk ! vOHminus=vsol
-  do j=1, npasosratioalpha  ! loop over ratio Pol-A/PolB en  alpha
+
+  do j=1, npasosratio  ! loop over ratio  PolB/PolA
  
-    logratioalpha = (logratioalphaf-logratioalphai)*float(j-1)/float(npasosratioalpha) + logratioalphai
-    ratioalpha= 10**(logratioalpha) !10**  !Segunda variable que fijamos  xmpoltotalalpha
+    logratio = (logratiof-logratioi)*float(j-1)/float(npasosratio) + logratioi
+    ratiopol= 10**(logratio) !10**  ! fijo el ratio polb total /pola total
 
+    do i = 1, npasosxtot ! loop over Pol-A en alpha
 
-    do i = 1, npasosxmAalpha ! loop over Pol-A en alpha
-
-      first_it= 0 ! para fHB pårimero 0  y despues itera
-      logxmAalpha = logxmAalphai  + (logxmAalphaf-logxmAalphai) &
-      /float(npasosxmAalpha)*float(i-1)  !Na
+      first_it= 0 !
+      logxmtot = logxtoti  + (logxtotf-logxtoti) &
+      /float(npasosxtot)*float(i-1)  ! 
  
-      xmAalpha = 10**(logxmAalpha)
-
+      xmxtot = 10**(logxmtot) !es POL-A
       iter=0
       call solve
 
@@ -135,17 +135,18 @@ do iii=1,yes
    write (3,*) arraympoltot(1,iii), arraymcsal(1,iii)
 end do
 
+open (unit=4,file='csal_poltot_mol_beta.txt',status='replace')
+
+do iii=1,yes
+   write (4,*) arraympoltot(2,iii), arraymcsal(2,iii)
+end do
+
+
 open (unit=31,file='csal_poltot_volfra_alpha.txt',status='replace')
 
 do iii=1,yes
    write (31,*) arraypoltot(1,iii), arraycsal(1,iii)
 end do
-
-open (unit=4,file='csal_poltot_mol_beta.txt',status='replace')
-
-do iii=1,yes
-   write (4,*) arraympoltot(2,iii), arraymcsal(2,iii)
-end do 
 
 open (unit=41,file='csal_poltot_volfra_beta.txt',status='replace')
 
@@ -194,7 +195,7 @@ end do
 open (unit=600,file='polA_addedNa_alpha.txt',status='replace')
 
 do iii=1,yes
-   write (600,*) arraymA(1,iii), arrayaddedNaCl(iii)
+   write (600,*) arraymA(1,iii)+arraymB(1,iii), arrayaddedNaCl(iii)
 end do
 
 
