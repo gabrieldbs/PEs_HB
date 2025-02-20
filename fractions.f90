@@ -34,16 +34,17 @@ xmphiNa=vectf(3)
 xmphiCl=vectf(4)
 xmphiSolv=vectf(5)
 gammaA=K0HB*xmphiA*Ma*vaa!
-xmHplus=xmphisolv*expmuHplus
-xmOHmin=xmphisolv*expmuOHmin
+
+xmHplus=xmphisolv*expmuHplus !
+xmOHmin=xmphisolv*expmuOHmin !
 
 !poner en las notas las constantes auxiliares  explicitamente 
-betaA=K0A*xmphiSolv/xmHplus ! ec 17 con *
-betaB=K0B*xmphiSolv/xmOHmin ! ec 20 con **
+betaA=K0A*xmphiSolv/xmHplus ! 
+betaB=K0B*xmphiSolv/xmOHmin !
 !alphaA=(vsal*(xmphisolv*vsol)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29  diferencia con löas notas  termino de lasal en el paquint 
 !alphaB=(vsal*(xmphisolv*vsol)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    chequeae qu combiene 
-alphaA=(vsal*(xmphisolv*vsol)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29  diferencia con löas notas  termino de lasal en el paquint 
-alphaB=(vsal*(xmphisolv*vsol)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    chequeae qu combiene 
+alphaA=(vsal*(1.0)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29   
+alphaB=(vsal*(1.0)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    
 
 deltaA = 1/(alphaA+alphaA/betaA+1)  !page 74  exbottles 
 deltaB = 1/(alphaB+alphaB/betaB+1) ! page 74 exbottle combinar manuscritpoa
@@ -131,10 +132,10 @@ vectfrac(9)= fHB_A
        fc_A )/fNC_A*xsolbulk*1.0d24/(Na*vsol))- pKaA              !! esto era para chequear pkaA
        K0Bcheck=(xmOHmin/xmphiSolv)*(fC_B/fnC_b) - K0B !
 
-!     K0ANacheck=((1)**vsal)*fasio_A/(fC_a)/(xmphiNA*vsol) - K0ANa
-!     K0BClcheck=((1)**vsal)/(xmphiCl*vsol)/((fC_B)/fasio_B) - K0BCl
-     K0ANacheck=((xmphisolv*vsol)**vsal)*fasio_A/(fC_a)/(xmphiNA*vsol) - K0ANa
-     K0BClcheck=((xmphiSolv*vsol)**vsal)/(xmphiCl*vsol)/((fC_B)/fasio_B) - K0BCl
+     K0ANacheck=((1)**vsal)*fasio_A/(fC_a)/(xmphiNA*vsol) - K0ANa
+     K0BClcheck=((1)**vsal)/(xmphiCl*vsol)/((fC_B)/fasio_B) - K0BCl
+!     K0ANacheck=((xmphisolv*vsol)**vsal)*fasio_A/(fC_a)/(xmphiNA*vsol) - K0ANa
+!     K0BClcheck=((xmphiSolv*vsol)**vsal)/(xmphiCl*vsol)/((fC_B)/fasio_B) - K0BCl
        
        K0Dcheck=fAS_b/(fC_A*fC_B*xmphia*Ma*vsol*vab)! - k0D!!chekeo asoc
        K0HBcheck=fHB_a/(fnC_A*fnc_A*xmphiA*MA*vAA) - K0HB!chekeo asoc
