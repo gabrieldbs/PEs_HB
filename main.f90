@@ -82,6 +82,8 @@ KBCl=10**(-pKBCl)
 
 xHplusbulk = (cHplusbulk*Na/(1.0d24))*(vs)
 xOHminbulk = (cOHminbulk*Na/(1.0d24))*(vs)
+xmHplusalpha=xHplusbulk/vs
+xmOHminalpha=xOHminbulk/vs
 xsolbulk=1.0 -xHplusbulk -xOHminbulk! - xnegbulk -xposbulk! -xNaClbulk !!?
 
 
@@ -195,7 +197,13 @@ end do
 open (unit=600,file='polA_addedNa_alpha.txt',status='replace')
 
 do iii=1,yes
-   write (600,*) arraymA(1,iii)+arraymB(1,iii), arrayaddedNaCl(iii)
+   write (600,*) arraymA(1,iii)+arraymB(1,iii), arrayaddedNaCla(iii)
+end do
+
+open (unit=603,file='polA_addedNa_beta.txt',status='replace')
+
+do iii=1,yes
+   write (603,*) arraymA(2,iii)+arraymB(2,iii), arrayaddedNaClb(iii)
 end do
 
 

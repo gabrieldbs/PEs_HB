@@ -44,13 +44,13 @@ read(8, *)  basura4! rsal
 read(8, *)  rsal !
 
 read(8, *)  basura5
-read(8, *)  logratioi, logratiof, npasosratio  !  ratio
+read(8, *)  logratioi, logratiof, npasosratio  !  scan total monomer density in molar
 
 !read(8, *) basura5
 !read(8, *) csalini,csalfin,ncsal  ! salt concentration in bulk (Molar)
 
 read(8, *)  basura6
-read(8, *)  logxtoti, logxtotf, npasosxtot   ! scan polA  monomer density
+read(8, *)  logxtoti, logxtotf, npasosxtot   ! scan ratio monomer density
 !
 read(8, *)  basura7
 read(8, *)  pKDi, pKDf, pKDp     ! polymer-polymer attraction strenght in kBT

@@ -5,7 +5,7 @@ use results
 
 implicit none
 integer i,ITERAHB,NITERAHB
-real*16 vectf(6),vectfrac(9)
+real*16 vectf(8),vectfrac(9)
 real*16 xmphiA,xmphiB
 real*16 xmphiNa,xmphiCl!,xmphiHplus,xmphiOHmin
 real*16 aa, bb, cc,auxA,auxB,AuxC,discriminant,quadPlus,quadMinus
@@ -26,7 +26,7 @@ integer max_iter,iter
   tol = 1.0e-4
   max_iter = 100000
 
-phase=vectf(6) ! 
+phase=vectf(8) ! 
 
 xmphiA=vectf(1)
 xmphiB=vectf(2)
@@ -34,17 +34,16 @@ xmphiNa=vectf(3)
 xmphiCl=vectf(4)
 xmphiSolv=vectf(5)
 gammaA=K0HB*xmphiA*Ma*vaa!
-
-xmHplus=xmphisolv*expmuHplus !
-xmOHmin=xmphisolv*expmuOHmin !
+xmHplus=vectf(6) !xmphisolv*expmuHplus*exp(-neutralconst)
+xmOHmin=vectf(7)!xmphisolv*expmuOHmin*exp(neutralconst)
 
 !poner en las notas las constantes auxiliares  explicitamente 
-betaA=K0A*xmphiSolv/xmHplus ! 
-betaB=K0B*xmphiSolv/xmOHmin !
+betaA=K0A*xmphiSolv/xmHplus ! ec 17 con *
+betaB=K0B*xmphiSolv/xmOHmin ! ec 20 con **
 !alphaA=(vsal*(xmphisolv*vsol)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29  diferencia con löas notas  termino de lasal en el paquint 
 !alphaB=(vsal*(xmphisolv*vsol)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    chequeae qu combiene 
-alphaA=(vsal*(1.0)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29   
-alphaB=(vsal*(1.0)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    
+alphaA=(vsal*(1.)**vsal)/(K0ANa*xmphiNa*vsal*vsol)! 29  diferencia con löas notas  termino de lasal en el paquint 
+alphaB=(vsal*(1.)**vsal)/(K0BCl*xmphiCl*vsal*vsol)!32    chequeae qu combiene 
 
 deltaA = 1/(alphaA+alphaA/betaA+1)  !page 74  exbottles 
 deltaB = 1/(alphaB+alphaB/betaB+1) ! page 74 exbottle combinar manuscritpoa
@@ -54,8 +53,6 @@ auxBC=1+(1./betaB)+(1./alphaB)
 Kaso=vab*vsol*K0D*xmphia*Ma
 auxAs=1. +betaA+betaA/alphaA
 
-
-!!!! COdigo para calcular hb
 fnc_A=x0
 fas_B=y0
 conver=0
@@ -93,7 +90,6 @@ do iter = 1, max_iter
   fas_B=  y_new
  !i stop
 enddo
-
 !if (conver==0)then
 !    print *, '!!!!!!!no convergio ', max_iter, "iteraciones."
 !endif
@@ -108,7 +104,6 @@ fC_B = fasio_B*alphaB !ec 32  fraction charged pol
 fnc_B=fc_B/betaB
 
 
-!print*,'fhb',fHB_A
 
 vectfrac(1)= fas_B
 vectfrac(2)= fas_A
@@ -126,7 +121,6 @@ vectfrac(9)= fHB_A
 !print*,'fnc_A,fnc_b',fnc_A,fnc_B
 !print*,'fc_A,fc_b',fc_A,fc_B
 !print*,'fhb_A',fHb_A
-
 !print*,'TESTEOS DE CONSTANTES'
        K0Acheckplus= -log10( (xmHplus/xmphisolv)*(&             !!
        fc_A )/fNC_A*xsolbulk*1.0d24/(Na*vsol))- pKaA              !! esto era para chequear pkaA
@@ -155,6 +149,6 @@ endif
 ! print*,'teste,  K0HBcheck' ,  K0HBcheck!
 ! print*,'testeo,K0Dcheck' , K0Dcheck- K0d
 !print*,'phase',phase
-!
+!stop!
 end subroutine
 
