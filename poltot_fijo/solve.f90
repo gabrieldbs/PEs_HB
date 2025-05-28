@@ -8,8 +8,8 @@ use const
 
 implicit none
 real*8 tolerancia,criterio,check_Ka_alpha,check_ka_beta,checkb_Kai,KK0check,KKaAcheckplus,kkaBcheckmin
-real*8 x1(7)
-real*8 x1g(7)
+real*8 x1(8)
+real*8 x1g(8)
 real*8 checkresults
 integer ier, i,newt, j, ii, jj
 integer flag
@@ -39,12 +39,13 @@ x1g(6)=x1(6)
 x1(7)=log(xmClbetainitial)     !xClbeta  inicial
 x1g(7)=x1(7)
 
+x1(8)=log(xmHplusalpha)
+x1g(8)=x1(8)
 
-!xmAalpha=-xmAbetainitial*(ratiopol+1.)+xmxtot*ratiopol
-xmAalpha=xmxtot !xmAalpha/(ratiopol+1)
+xmAalpha=xmxtot !xmAalpha POLA
 
-x1(1)=(ratiopol*(xmAalpha+xmAbetainitial+xmBbetainitial)-xmBbetainitial)/(1-ratiopol)
-!x1(1)=(xmAalpha+xmAbetainitial)/ratiopol-xmBbetainitial 
+x1(1)=ratiopol*(xmAalpha)
+!x1(1)=(ratiopol*(xmAalpha+xmAbetainitial+xmBbetainitial)-xmBbetainitial)/(1-ratiopol) !xmbalpha sale de ratio
 x1(1)=log(x1(1))
 x1g(1)=x1(1)
 
@@ -54,16 +55,18 @@ x1g(1)=x1(1)
 !x1(9) =log(xmHplusbeta)! log(xmOHminbetainitial)      ! initial guess for xmNaalpha
 !x1g(9) = x1(9)
 
-!print*,'in:alpha',exp(x1(1)),ratiopol,exp(x1(1)),exp(x1(2)),exp(x1(3))!,exp(x1(10))
-!print*,'in:beta',exp(x1(4)),exp(x1(5)),exp(x1(6)),exp(x1(7))!,exp(x1(8)),exp(x1(9))
+print*,'in:alpha',exp(x1(1)),ratiopol,exp(x1(1)),exp(x1(2)),exp(x1(3))!,exp(x1(10))
+print*,'in:beta',exp(x1(4)),exp(x1(5)),exp(x1(6)),exp(x1(7)),exp(x1(8))!,exp(x1(9))
 
 xSolventalpha=1-xmAalpha*Ma*vp*vsol-exp(x1(1))*Mb*vp*vsol-exp(x1(2))*vneg*vsol-exp(x1(3))*vneg*vsol
-xSolventalpha=xSolventalpha/(1+expmuHplus+expmuOhmin)
+xSolventalpha=xSolventalpha - xmHplusalpha  -  xmOHminalpha !
 xmSolventalpha=xSolventalpha/vs
 
 xSolventbeta=1-exp(x1(4))*Ma*vp*vsol-exp(x1(5))*Mb*vp*vsol-exp(x1(6))*vneg*vsol-exp(x1(7))*vneg*vsol
-xSolventbeta=xSolventbeta/(1+expmuHplus+expmuOhmin)
+xSolventbeta=xSolventbeta -  xmHplusalpha  -  xmOHminalpha !/(1+expmuHplus+expmuOhmin)
 xmSolventbeta=xSolventbeta/vs
+
+print*,'solv',xSolventbeta,xSolventalpha
 
 !print*,'Na_alfa', 'n_tot_alfa', 'EO/Na alfa', 'Na_beta-Na_alpha', 'n_tot_beta', 'EO/Na beta'
 call call_kinsol(x1, x1g, ier)
@@ -89,7 +92,8 @@ if (norma.lt.criterio) then ! encuentra solucion
 print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
 !print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
 !stop
-write(8000,*) exp(x1(1)),exp(x1(2)),exp(x1(3)), exp(x1(4)), exp(x1(5)),exp(x1(6)),exp(x1(7)),xmAalpha ,pKD,ratiopol,Ma,Mb
+write(8000,*) exp(x1(1)),exp(x1(2)),exp(x1(3)), exp(x1(4)), exp(x1(5)),exp(x1(6)),exp(x1(7)),xmAalpha ,pKD,ratiopol,Ma,Mb,K0ANa&
+        ,K0BCl,K0D,K0HB
 write(8001,*) conver,testconst_hb,testconst_as,conver_B,testconst_hb_b,testconst_as_B
 
     print*,'Grid Point OK',yes
@@ -129,15 +133,16 @@ write(8001,*) conver,testconst_hb,testconst_as,conver_B,testconst_hb_b,testconst
 
       write(9994,*)yes, fch_a_alpha, funas_A_alpha, fch_B_alpha,funas_b_alpha
       write(9993,*)yes, fch_a_beta, funas_A_beta, fch_B_beta,funas_b_beta
-      write(9990,*)yes,testconst_as,testconst_hb,test_h_oh
+      write(9990,*)yes,testconst_as,testconst_hb,test_h_oh,testkna,testkcl
       write(9992,*)yes, fhb_a_alpha, fhb_a_beta      
       write(9991,*)yes, fhb_a_alpha+fch_a_alpha+funas_A_alpha+faspol_a_alpha+fasio_A_alpha,&
         fhb_a_beta+fch_a_beta+funas_A_BETa+faspol_a_BETa+fasio_A_beta,&
         fch_b_alpha+funas_b_alpha+faspol_b_alpha+fasio_b_alpha,&
         fch_b_beta+funas_b_BETa+faspol_b_BETa+fasio_b_beta
 
-      arrayaddedNaCl(yes)=xmaddedNaCl/Na*1.d24 !*vsol*vpos !/Na*1.d24
-  
+      arrayaddedNaCla(yes)=xmaddedNaClalpha/Na*1.d24 !*vsol*vpos !/Na*1.d24
+      arrayaddedNaClb(yes)=xmaddedNaClbeta/Na*1.d24 !*vsol*vpos !/Na*1.d24
+
 
       arraymNa(1,yes)=xmNaalpha/Na*1.d24
       arraymNa(2,yes)=xmNabeta/Na*1.d24

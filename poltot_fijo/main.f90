@@ -22,11 +22,13 @@ print*, ' HB_PEsolution GIT Version: ', _VERSION
 call readinput ! read input from file
 call allocation
 
+!!! Initial
 vs=vsol
 vaa=1.
 vab=1.
 vpol=vpolcero/vsol
-vneg=4./3.*pi*rsal**3/vsol !volume of anion in units of vsol
+vneg=4./3.*pi*rsal**3/vsol !
+!vneg=vsol/vsol!4./3.*pi*rsal**3/vsol !volume of anion in units of vsol
 yes=0 ! es para  chequear si encuentra o no xalpha, xbeta
 
 
@@ -40,6 +42,8 @@ vp=vpol!
 vsal=vneg!vsol/vsol! Test
 vpos=vsal
 !vneg=vsal
+
+!! barrido de constantes
 
 do k=1,pKDp
 do kk=1,pKANap
@@ -78,6 +82,8 @@ KBCl=10**(-pKBCl)
 
 xHplusbulk = (cHplusbulk*Na/(1.0d24))*(vs)
 xOHminbulk = (cOHminbulk*Na/(1.0d24))*(vs)
+xmHplusalpha=xHplusbulk/vs
+xmOHminalpha=xOHminbulk/vs
 xsolbulk=1.0 -xHplusbulk -xOHminbulk! - xnegbulk -xposbulk! -xNaClbulk !!?
 
 
@@ -90,20 +96,22 @@ xsolbulk=1.0 -xHplusbulk -xOHminbulk! - xnegbulk -xposbulk! -xNaClbulk !!?
  
   xmsolventalpha=xsolbulk
   xmsolventbeta=xsolbulk
+
   expmuHplus=xHplusbulk/xsolbulk ! vHplus=vsol
   expmuOHmin=xOHminbulk/xsolbulk ! vOHminus=vsol
-  do j=1, npasosratio  ! loop over ratio Pol-A/PolB en  alpha
+
+  do j=1, npasosratio  ! loop over ratio  PolB/PolA
  
     logratio = (logratiof-logratioi)*float(j-1)/float(npasosratio) + logratioi
-    ratiopol= 10**(logratio) !10**  !Segunda variable que fijamos  xmpoltotalalpha
+    ratiopol= 10**(logratio) !10**  ! fijo el ratio polb total /pola total
 
     do i = 1, npasosxtot ! loop over Pol-A en alpha
 
-      first_it= 0 ! para fHB pårimero 0  y despues itera
+      first_it= 0 !
       logxmtot = logxtoti  + (logxtotf-logxtoti) &
-      /float(npasosxtot)*float(i-1)  !Na
+      /float(npasosxtot)*float(i-1)  ! 
  
-      xmxtot = 10**(logxmtot)
+      xmxtot = 10**(logxmtot) !es POL-A
       iter=0
       call solve
 
@@ -189,7 +197,13 @@ end do
 open (unit=600,file='polA_addedNa_alpha.txt',status='replace')
 
 do iii=1,yes
-   write (600,*) arraymA(1,iii)+arraymB(1,iii), arrayaddedNaCl(iii)
+   write (600,*) arraymA(1,iii)+arraymB(1,iii), arrayaddedNaCla(iii)
+end do
+
+open (unit=603,file='polA_addedNa_beta.txt',status='replace')
+
+do iii=1,yes
+   write (603,*) arraymA(2,iii)+arraymB(2,iii), arrayaddedNaClb(iii)
 end do
 
 

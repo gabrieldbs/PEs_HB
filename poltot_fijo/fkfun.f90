@@ -19,19 +19,19 @@ real*8 xmsalt
 real*8 Penality,testKa,testkeo,testkd
 real*8 testneuta,testneutb,testpcka,testpckb
 integer*4 ier
-real*16 vectfalpha(6),vectfbeta(6),vectfrac(9)
-real*8 x(7),f(7)
+real*16 vectfalpha(8),vectfbeta(8),vectfrac(9)
+real*8 x(8),f(8)
 real*8 potA,potB,potNa,free_ener,potH,potOH,potquimH,potquimOH
 real*8 muAalpha,muAbeta,muBalpha,muBbeta,fealpha,febeta
 real*8  potquimA,elib,potquimB,potquimNa,muNaalpha,muNabeta
 real*8 neutralalpha,neutralbeta,elecneualpha,elecneubeta
 real*8 penalityA,penalityNa,penalityB
 real*8 diffNaalpha
+real*8 pOhbeta,pHbeta,cohminbeta
 integer i
 
 
-!xmAalpha
-!xmHplusalpha=xHplusbulk
+!xmHplusalph:a=xHplusbulk
 !xmOHalpha=xOHminbulk
 !xmBalpha =xmAalpha/ratioalpha  !b alpha demas para convergencia
 !xmBalpha= (-exp(x(5))*(ratiopol+1.)+xmxtot)/(ratiopol+1.)
@@ -43,36 +43,36 @@ xmBbeta=exp(x(5))       !B beta
 xmNabeta=exp(x(6))        !xmNa en beta
 xmClbeta=exp(x(7))      !cl beta
 
+xmHplusbeta=exp(x(8))
+pHbeta=-log10((xmHplusbeta*1.0d24/Na))
+pOHbeta=14.0 -pHbeta
+cOHminbeta=10**(-pOhbeta)
+xmOHminbeta=cOHminbeta*Na/(1.0d24)
 
-!xmBalpha= (xmAalpha+xmAbeta)/ratiopol -xmBbeta!
-xmBalpha= (ratiopol*(xmAalpha+xmAbeta+xmBbeta)-xmBbeta)/(1-ratiopol)
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!xmBalpha= (ratiopol*(xmAalpha+xmAbeta+xmBbeta)-xmBbeta)/(1-ratiopol)
+xmBalpha= ratiopol*(xmAalpha) 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 vectfalpha(1)=xmAalpha
 vectfalpha(2)=xmBalpha
 vectfalpha(3)=xmNaalpha
 vectfalpha(4)=xmClalpha
 vectfalpha(5)=xmSolventalpha
-xmHplusalpha=xmSolventalpha*expmuhplus
-xmOHminalpha=xmSolventalpha*expmuohmin
-vectfalpha(6)=1
-!vectfalpha(7)=fHB_A_alpha
+vectfalpha(6)=xmHplusalpha 
+vectfalpha(7)=xmOHminalpha
+vectfalpha(8)=1 !para identificar fase
 
-vectfbeta(1)=xmAbeta
+vectfbeta(1)=xmAbeta 
 vectfbeta(2)=xmBbeta
 vectfbeta(3)=xmNabeta
 vectfbeta(4)=xmClbeta
 vectfbeta(5)=xmSolventbeta
-xmHplusbeta=xmSolventbeta*expmuhplus
-xmOHminbeta=xmSolventbeta*expmuohmin
-vectfbeta(6)=2
-!vectfbeta(7)=fHB_A_beta
+vectfbeta(6)=xmHplusbeta
+vectfbeta(7)=xmOHminbeta
+vectfbeta(8)=2
 
 
 call fractions(vectfalpha,vectfrac)
-!!!Aca  DEFINIRR BIEN LO VOY A NECESITAR
-!vectfractions-> (1) fEO_aspol,(2)fA_aspol,(3) fEO_asion (4)fA_Asion,(5)fEO_unas,f(6)fA_unas
 
 
 faspol_B_alpha=vectfrac(1)
@@ -92,7 +92,6 @@ fHB_A_alpha=vectfrac(9)
 
 call fractions(vectfbeta,vectfrac)
 
-!vectdddfractions-> (1) fEO_aspol,(2)fA_aspol,(3) fEO_asion (4)fA_Asion,(5)fEO_unas,f(6)fA_unas
 
 faspol_B_beta=vectfrac(1)
 faspol_A_beta=vectfrac(2)
@@ -111,7 +110,6 @@ fHB_A_beta=vectfrac(9)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !  AUXILIARY CALC
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!xmBalpha= (xmAalpha+xmAbeta)/ratiopol -xmBbeta!
 
 !xmClalpha=-fA_unas_alpha*Ma*xmAalpha + fB_asion_alpha*Meo*xmEOalpha + xmNaalpha  ! xmCl en alpha
 !xmClbeta=-fA_unas_beta*Ma*xmAbeta + fB_asion_beta*MB*xmEObeta + xmNabeta  ! xmCl en alpha
@@ -125,20 +123,12 @@ xSolventbeta=1. - Ma*vpol*vsol*xmAbeta  -Mb*vpol*vsol*xmBbeta&
 -fasio_A_beta*Ma*xmAbeta*vpos*vsol-fasio_B_beta*Mb*xmBbeta*vneg*vsol&
 -xmNabeta*vpos*vsol -xmClbeta*vneg*vsol-(xmhplusbeta+xmohminbeta)*vsol
 
+!print*,'solv',xSolventalpha,xSolventbeta
 xmSolventalpha=xSolventalpha/vsol
 xmSolventbeta =xSolventbeta/vsol
 
-!xmHplusalpha=xmSolventalpha*expmuhplus
-!xmOHminalpha=xmSolventalpha*expmuohmin
-!xmHplusbeta=xmSolventbeta*expmuhplus
-!xmOHminbeta=xmSolventbeta*expmuohmin
-
 packconst=(1./vsol)*(log(xSolventalpha)-log(xSolventbeta) ) ! betapi 
 neutralconst=log(xmClbeta*vsol)+vneg*vsol*packconst-log(xmClalpha*vsol) ! phi
-!print*,'neutralconst', neutralconst,xmClbeta,xmClalpha,packconst
-!print*,'s',xmSolventalpha,xmSolventbeta
-
-!stop
 
 !print*,'Solven_alpha, Solven_beta,packconst,neutralconst',xSolventalpha,xSolventbeta,packconst,neutralconst
 !!print*,' neutralconst',neutralconst,neutralconstalpha,neutralconstbeta
@@ -179,7 +169,12 @@ call muOH(potquimOH)
 potOH=potquimOH
 
 
-xmaddedNaCl = xmNaalpha + fasio_A_alpha*MA*xmAalpha - xmAalpha*MA
+xmaddedNaClalpha = xmNaalpha + fasio_A_alpha*MA*xmAalpha !mAalpha*MA
+xmaddedNaClalpha =xmaddedNaClalpha + xmClalpha + fasio_B_alpha*MB*xmBalpha
+
+xmaddedNaClbeta = xmNabeta + fasio_A_beta*MA*xmAbeta !mAalpha*MA
+xmaddedNaClbeta = xmaddedNaClbeta +xmClbeta + fasio_B_beta*MB*xmBbeta
+
 
 Penality=abs(xmNabeta-xmNaalpha)/(xmNabeta*0.5+xmNaalpha*0.5)
 Penality=Penality+abs(xmAalpha-xmAbeta)/(xmAalpha*0.5+xmAbeta*0.5)
@@ -194,25 +189,23 @@ f(3)=-potA/Penality
 f(4)=-potB/Penality
 f(5)=-neutralalpha/Penality
 f(6)=-neutralbeta/Penality
-f(7)=exp(x(1))-xmBalpha
-!f(8)=exp(x(8))-xmHplusalpha!-potH/penality
+f(7)=(exp(x(1))-xmBalpha)!+(ratiopol-xmBbeta/xmAbeta) 
+f(8)=-potH/penality
 !f(9)=exp(x(9))-xmOHminalpha !-potOH/penality
 !f(10)=exp(x(10))-fhB_A_alpha
 iter = iter + 1
 norma = 0.0
 
-do i = 1, 7
+do i = 1,8 
 !print*,'f',i,f(i)
   norma = norma +(f(i))**2  
 enddo
-
 !if (norma<1.0E-002 )then
 !      print*,'yes',xmaalpha,xmbalpha,xmNaalpha,xmClalpha
 !      print*,'yes',xmabeta,xmbbeta,xmNabeta,xmClbeta
 !       print*,'yes',potH,potOH
-!stop
 !endif
-test_H_OH=potH+potOH
+test_H_OH=potOH
 !testneuta=xmNaalpha -xmClalpha-Ma*xmAalpha*fA_unas_alpha+fEO_asion_alpha*Meo*xmEOalpha
 !testneutb=xmNabeta -xmClbeta-Ma*xmAbeta*fA_unas_beta+fEO_asion_beta*Meo*xmEObeta
 
@@ -223,7 +216,7 @@ test_H_OH=potH+potOH
 !testpckb=testpckb -vneg*vsol*(Ma*xmAbeta*(fA_asion_beta+fA_aspol_beta)+Meo*xmEObeta*fEO_asion_beta)
 !print*,'testneutra',testneuta,testneutb,testpcka,testpckb
 
-print*,norma,penality !if (Norma.lt.1E-5)then
+!print*,norma,penality !if (Norma.lt.1E-5)then
 !stop
 ier = 0.0
 return

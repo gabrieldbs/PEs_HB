@@ -51,14 +51,14 @@ subroutine call_kinsol(x1_old, xg1_old, ier)
 implicit none
 integer *4 ier ! Kinsol error flag
 integer i
-real*8 x1(7), xg1(7)
-real*8 x1_old(7), xg1_old(7)
+real*8 x1(8), xg1(8)
+real*8 x1_old(8), xg1_old(8)
 integer*8 iout(15) ! Kinsol additional output information
 real*8 rout(2) ! Kinsol additional out information
 integer*8 msbpre, msbpres
 real*8 fnormtol, scsteptol
-real*8 uscale(7),fscale(7)
-real*8 constr(7)
+real*8 uscale(8),fscale(8)
+real*8 constr(8)
 integer*4  globalstrat, maxl, maxlrst
 integer neq ! Kinsol number of equations
 integer*8 max_niter
@@ -66,7 +66,7 @@ real*8 max_step
 common /psize/ neq ! Kinsol
 integer ierr
 real*8 RERRFUNC
-neq=7
+neq=8
 
 ! INICIA KINSOL
 
@@ -109,7 +109,7 @@ constr(4) = 0.0
 constr(5) = 0.0
 constr(6) = 0.0
 constr(7) = 0.0
-!constr(8) = 0.0
+constr(8) = 0.0
 !constr(9) = 0.0
 !constr(10) = 0.0
 
@@ -171,9 +171,9 @@ use MPI
 
 integer i
 
-real*8 x1_old(7)
-real*8 x1(7)
-real*8 f(7)
+real*8 x1_old(8)
+real*8 x1(8)
+real*8 f(8)
 
 ! MPI
 

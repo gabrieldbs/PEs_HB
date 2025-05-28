@@ -42,14 +42,15 @@ real*8 logratioEOAalphai, logratioEOAalphaf
 real*8 vsal,vs,vp
 real*16 pKaHplus,pKHbulk,cHplusbulk,pHbulk
 real*16 pKaOHmin,pOHbulk,cOHminbulk
-real*16 expmupos, expmuneg, expmuHplus, expmuOHmin
+real*16 expmupos, expmuneg, expmuHplus, expmuOHmin!,xmHplusbulk
 integer ncsal
 real*16 K0ANa,K0BCl
 real*16 pKaA
 real*16 pkaB
 real*8 xmphiOHmin,xmphiHplus,xsolbulk
 real*8 fA_HB_alphainitial,xmhplusbetainitial,xmohminbetainitial
-real*8 test_H_OH
+real*8 xmaddedNaClbeta ,xmaddedNaClalpha
+real*8 test_H_OH,testkna,testkcl
 endmodule
 
 module results
@@ -71,6 +72,9 @@ real*8 arraycsal(2,100000)
 
 real*8 arraymNa(2,100000)
 real*8 arrayaddedNaCl(100000)
+real*8 arrayaddedNaCla(100000)
+real*8 arrayaddedNaClb(100000)
+
 real*8 arraymCl(2,100000)
 real*8 arraymA(2,100000)
 real*8 arraymB(2,100000)
