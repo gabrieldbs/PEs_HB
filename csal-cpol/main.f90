@@ -1,0 +1,231 @@
+  !  ###############################################################################!     
+  !   Molecular Theory Program 
+  !     H  base del pss/pdma
+  !###############################################################################
+!use pks
+use system
+use const
+use solver
+use results
+implicit none
+integer i, j, iii,isal
+real*8 logxmAalpha
+real*8 logratioalpha
+real*8 xposbulk,xnegbulk,xHplusbulk,xOHminbulk,Kw,xsalt
+real*8 pKw,KAinput,Kbind,KBinput,KANainput,KBClinput,kte
+real*8 kbcl,KANa,DA
+integer k, kk, kkk
+integer kkkk, kkkkk,kkkkkk
+
+print*, ' HB_PEsolution GIT Version: ', _VERSION
+
+call readinput ! read input from file
+call allocation
+
+!!! Initial
+vs=vsol
+vaa=1.
+vab=1.
+vpol=vpolcero/vsol
+vneg=4./3.*pi*rsal**3/vsol !
+!vneg=vsol/vsol!4./3.*pi*rsal**3/vsol !volume of anion in units of vsol
+yes=0 ! es para  chequear si encuentra o no xalpha, xbeta
+
+
+pKw=14.0
+kW=10**(-pKw)
+pOHbulk=pKw-pHbulk
+cOHminbulk=10**(-pOHbulk)
+cHplusbulk=10**(-pHbulk)
+
+vp=vpol!
+vsal=vneg!vsol/vsol! Test
+vpos=vsal
+!vneg=vsal
+
+!! barrido de constantes
+
+do k=1,pKDp
+do kk=1,pKANap
+do kkk=1,pKBClp
+do kkkk = 1,Map 
+do kkkkk = 1,Mbp 
+do kkkkkk = 1,pKHBp
+
+pKHB = pKHBi + (pKHBf-pKHBi)*float(kkkkkk-1)/float(pKHBp)  !asoc Pol-A -Pol-A
+
+pKD = pKDi + (pKDf-pKDi)*float(k-1)/float(pKDp)  !asoc Pol-A -- Pol-B
+pKANa = pKANai + (pKANaf-pKANAi)*float(kk-1)/float(pKANap) !asoc Pol-A Na
+pKBCl = pKBCli + (pKBCLf-pKBCli)*float(kkk-1)/float(pKBClp)! asoc Pol-B Cl
+Ma = Mai + (Maf-Mai)*float(kkkk-1)/float(Map) ! #  chains Pol A
+Mb = Mbi + (Mbf-Mbi)*float(kkkkk-1)/float(Mbp) !# Chains Pol B
+
+
+KHB=10**(-pKHB)
+KD=10**(-pKD)
+KA=10**(-pKaA)
+KB=10**(-pKaB)
+KANa=10**(-pKANa)
+KBCl=10**(-pKBCl)
+
+!xposbulk=phi_sal  !NUEVO
+!xnegbulk=phi_sal  !NUEVO
+!print*,' pKHB ,pKD,pKANa,pKBCl ,Ma,Mb,pkaA,pkaB'
+
+!print*, pKHB ,pKD,pKANa,pKBCl ,Ma,Mb,pKaA,pKaB
+
+!print*,'pkaA pKaB',pkAa,pkaB
+
+!print*,'vpol',vpol,'vsol',vsol,'vneg',vsal
+!
+!print*,' pKD' ,pKD,' pkHB' ,pkHB
+
+xHplusbulk = (cHplusbulk*Na/(1.0d24))*(vs)
+xOHminbulk = (cOHminbulk*Na/(1.0d24))*(vs)
+xmHplusalpha=xHplusbulk/vs
+xmOHminalpha=xOHminbulk/vs
+xsolbulk=1.0 -xHplusbulk -xOHminbulk! - xnegbulk -xposbulk! -xNaClbulk !!?
+
+
+  K0ANa = (KANa)*(xsolbulk**(vpos/vsol)/(Na/1.0d24)) ! thermodynamic constants
+  K0BCl = (KBCL)*(xsolbulk**(vneg/vsol)/(Na/1.0d24))
+  K0D = (KD)*(Na/1.0d24)
+  K0HB = (KHB)*(Na/1.0d24)
+  K0A = (KA*vs/xsolbulk)*(Na/1.0d24)! intrinstic equilibruim constant 
+  K0B = (Kw/KB*vs/xsolbulk)*(Na/1.0d24)
+ 
+  xmsolventalpha=xsolbulk
+  xmsolventbeta=xsolbulk
+
+  expmuHplus=xHplusbulk/xsolbulk ! vHplus=vsol
+  expmuOHmin=xOHminbulk/xsolbulk ! vOHminus=vsol
+
+  do j=1, npasosAalpha  ! loop over ratio  PolB/PolA
+   logxmAalpha = (logxmAalphaf-logxmAalphai)*float(j-1)/float(npasosAalpha) + logxmAalphai
+   xmAalpha= 10**(logxmAalpha) !10**  ! fijo el ratio polb total /pola total
+
+    !logratio = (logratiof-logratioi)*float(j-1)/float(npasosratio) + logratioi
+    !ratiopol= 10**(logratio) !10**  ! fijo el ratio polb total /pola total
+
+    do i = 1, npasosxmNaalpha ! loop over Pol-A en alpha
+      first_it= 0 !
+      logxmNaalpha = logxmNaalphai  + (logxmNaalphaf-logxmNaalphai) &
+      /float(npasosxmNaalpha)*float(i-1)  ! 
+ 
+     xmNaalphatot = 10**logxmNaalpha  + xmAalpha*MA 
+      iter=0
+      call solve
+
+     enddo ! j
+  
+  enddo ! i
+ 
+!  enddo  !isal
+
+enddo !k
+enddo !kk
+enddo !kkk
+enddo !kkkk
+enddo !kkkkk
+enddo !kkkkkk
+
+
+! SAVE RESULTS TO FILE
+
+open (unit=3,file='csal_poltot_mol_alpha.txt',status='replace')
+
+do iii=1,yes
+   write (3,*) arraympoltot(1,iii), arraymcsal(1,iii)
+end do
+
+open (unit=4,file='csal_poltot_mol_beta.txt',status='replace')
+
+do iii=1,yes
+   write (4,*) arraympoltot(2,iii), arraymcsal(2,iii)
+end do
+
+
+open (unit=31,file='csal_poltot_volfra_alpha.txt',status='replace')
+
+do iii=1,yes
+   write (31,*) arraypoltot(1,iii), arraycsal(1,iii)
+end do
+
+open (unit=41,file='csal_poltot_volfra_beta.txt',status='replace')
+
+do iii=1,yes
+   write (41,*) arraypoltot(2,iii), arraycsal(2,iii)
+end do
+
+
+open (unit=40,file='cpoltot_ratioBA_mol_alpha.txt',status='replace')
+
+do iii=1,yes
+   write (40,*) arrayratioBA(1,iii), arraympoltot(1,iii)
+end do
+
+open (unit=30,file='cpoltot_ratioBA_mol_beta.txt',status='replace')
+
+do iii=1,yes
+   write (30,*) arrayratioBA(2,iii), arraympoltot(2,iii)
+end do
+
+open (unit=400,file='csal_ratioBA_mol_alpha.txt',status='replace')
+
+do iii=1,yes
+   write (400,*) arrayratioBA(1,iii), arraymcsal(1,iii)
+end do
+
+open (unit=300,file='csal_ratioBA_mol_beta.txt',status='replace')
+
+do iii=1,yes
+   write (300,*) arrayratioBA(2,iii), arraymcsal(2,iii)
+end do
+
+open (unit=600,file='polA_polB_alpha.txt',status='replace')
+
+do iii=1,yes
+   write (600,*) arraymA(1,iii), arraymB(1,iii)
+end do
+ 
+
+open (unit=500,file='polA_polB_beta.txt',status='replace')
+
+do iii=1,yes
+   write (500,*) arraymA(2,iii), arraymB(2,iii)
+end do
+
+open (unit=600,file='polA_addedNa_alpha.txt',status='replace')
+
+do iii=1,yes
+   write (600,*) arraymA(1,iii)+arraymB(1,iii), arrayaddedNaCla(iii)
+end do
+
+open (unit=604,file='polA_addedcl_alpha.txt',status='replace')
+
+do iii=1,yes
+   write (604,*) arraymA(1,iii)+arraymB(1,iii), arrayaddedCla(iii)
+end do
+
+open (unit=605,file='polA_addedcl_beta.txt',status='replace')
+
+do iii=1,yes
+   write (605,*) arraymA(2,iii)+arraymB(2,iii), arrayaddedClb(iii)
+end do
+
+
+open (unit=603,file='polA_addedNa_beta.txt',status='replace')
+
+do iii=1,yes
+   write (603,*) arraymA(2,iii)+arraymB(2,iii), arrayaddedNaClb(iii)
+end do
+
+
+call endall     ! clean up and terminate
+end 
+
+
+
+subroutine endall
+ stop
+end subroutine
