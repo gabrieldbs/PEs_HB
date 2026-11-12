@@ -1,3 +1,4 @@
+!potquim cation (Na) alpha- beta ! i.e. dilute - coacervate phase, following eq.xx
 
 subroutine muNa(potquimNa)
 use const

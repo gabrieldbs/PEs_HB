@@ -1,5 +1,5 @@
-
-subroutine electroneutroalpha(electroa)
+! Electroneutrality in dilute phase alpha
+subroutine electroneutroalpha(electroa) 
 use const
 use system
 use results

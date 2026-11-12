@@ -1,3 +1,4 @@
+!Definition of variables!
 module system
 !real*16 delta   ! delta is the discretization lenght in z direction
 !real*16 sigmaA

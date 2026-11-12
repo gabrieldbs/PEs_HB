@@ -140,10 +140,10 @@ do i = 1, neq ! Initial guess
       xg1(i) = x1(i)  
 enddo
 
-print*,'x1',x1
+!print*,'x1',x1
 call fkinsol(x1, globalstrat, uscale, fscale, ier)         ! Llama a kinsol
 
-print*, 'IER:', ier
+!print*, 'IER:', ier
 
 if (ier .lt. 0) then
       print*, 'call_kinsol: SUNDIALS_ERROR: FKINSOL returned IER = ', ier

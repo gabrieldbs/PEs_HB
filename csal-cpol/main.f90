@@ -112,7 +112,7 @@ xsolbulk=1.0 -xHplusbulk -xOHminbulk! - xnegbulk -xposbulk! -xNaClbulk !!?
       logxmNaalpha = logxmNaalphai  + (logxmNaalphaf-logxmNaalphai) &
       /float(npasosxmNaalpha)*float(i-1)  ! 
  
-     xmNaalphatot = 10**logxmNaalpha  + xmAalpha*MA 
+     xmNaalphatot = 10**logxmNaalpha  ! + xmAalpha*MA esto es na_new ! sin este termino es na
       iter=0
       call solve
 

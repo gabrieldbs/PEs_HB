@@ -31,10 +31,6 @@ real*8 pOhbeta,pHbeta,cohminbeta
 integer i
 
 
-!xmHplusalph:a=xHplusbulk
-!xmOHalpha=xOHminbulk
-!xmBalpha =xmAalpha/ratioalpha  !b alpha demas para convergencia
-!xmBalpha= (-exp(x(5))*(ratiopol+1.)+xmxtot)/(ratiopol+1.)
 xmNaalpha=exp(x(2)) !na alphga
 xmClalpha= exp(x(3)) !cl alpha
 
@@ -128,7 +124,7 @@ xmSolventalpha=xSolventalpha/vsol
 xmSolventbeta =xSolventbeta/vsol
 
 packconst=(1./vsol)*(log(xSolventalpha)-log(xSolventbeta) ) ! betapi 
-neutralconst=log(xmClbeta*vsol)+vneg*vsol*packconst-log(xmClalpha*vsol) ! phi
+neutralconst=log(xmClbeta*vsol)+vneg*vsol*packconst-log(xmClalpha*vsol) ! phi ! from Eq. xx  pot quim Cl
 
 !print*,'Solven_alpha, Solven_beta,packconst,neutralconst',xSolventalpha,xSolventbeta,packconst,neutralconst
 !!print*,' neutralconst',neutralconst,neutralconstalpha,neutralconstbeta

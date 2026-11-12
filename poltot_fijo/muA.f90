@@ -1,4 +1,4 @@
-
+!potquim Pol-A alpha- beta ! i.e. dilute - coacervate phase, following eq.xx
 subroutine muA(potquimA)
 use const
 use system

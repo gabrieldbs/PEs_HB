@@ -1,3 +1,4 @@
+!potquim Pol-B alpha- beta ! i.e. dilute - coacervate phase, following eq.xx
 
 subroutine muB(potquimB)
 use const

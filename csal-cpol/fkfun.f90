@@ -192,7 +192,7 @@ xmaddedNaClbeta = xmNabeta + fasio_A_beta*MA*xmAbeta !mAalpha*MA
 !diffnaalpha = (xmNaalpha ) - xmNaalphatot
 
 
-Penality=abs(xmNabeta-xmNaalpha)/(xmNabeta*0.5+xmNaalpha*0.5)
+!Penality=abs(xmNabeta-xmNaalpha)/(xmNabeta*0.5+xmNaalpha*0.5)
 Penality=Penality+abs(xmAalpha-xmAbeta)/(xmAalpha*0.5+xmAbeta*0.5)
 Penality=Penality+abs(xmBalpha-xmBbeta)/(xmBalpha*0.5+xmBbeta*0.5)
 Penality=Penality+abs(xmClalpha-xmClbeta)/(xmClalpha*0.5+xmClbeta*0.5)

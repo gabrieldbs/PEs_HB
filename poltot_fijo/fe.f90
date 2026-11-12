@@ -1,3 +1,5 @@
+!Free energy acording Ec. xx.
+!The importance is the diferecen between Delta Fe = Fe_alpha -Fe_beta (F_dilute -F_coacervate)
 subroutine fe(elib)
 
 use results
@@ -6,7 +8,6 @@ use const
 implicit none
 real*8 Free_energy,elib 
 !!checkear xmsolvent
-!!PSSPDDA
 Free_Energy = 0.0
 Free_Energy=Free_Energy -xmAalpha-xmBalpha-xmSolventalpha-xmNaalpha-xmClalpha
 Free_Energy=Free_Energy -xmHplusalpha-xmOHminalpha

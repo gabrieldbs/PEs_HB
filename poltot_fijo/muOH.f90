@@ -1,3 +1,4 @@
+!potquim OH- alpha- beta ! i.e. dilute - coacervate phase, following eq.xx
 
 subroutine muOH(potquimOH)
 use const

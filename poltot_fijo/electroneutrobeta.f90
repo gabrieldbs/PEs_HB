@@ -1,4 +1,4 @@
-
+! electroneutrality in coacervate phase beta
 subroutine electroneutrobeta(electrob)
 use const
 use system

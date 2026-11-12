@@ -1,3 +1,4 @@
+!routine to solve the system
 subroutine solve
 
 !use pks 
@@ -18,7 +19,7 @@ integer ngrid,iii
 criterio=1E-6!criterio pra la norma
 tolerancia=1E-6!criterio pra la diferencia de concentraciones relativa
 
-x1(1)=log(xmBalphainitial) ! B in alpha
+x1(1)=log(xmBalphainitial) ! Pol-B in alpha
 x1g(1)=x1(1)  
 
 x1(2) = log(xmNaalphainitial)      ! initial guess for xmNaalpha
@@ -39,7 +40,7 @@ x1g(6)=x1(6)
 x1(7)=log(xmClbetainitial)     !xClbeta  inicial
 x1g(7)=x1(7)
 
-x1(8)=log(xmHplusalpha)
+x1(8)=log(xmHplusalpha)         !pH
 x1g(8)=x1(8)
 
 xmAalpha=xmxtot !xmAalpha POLA
@@ -55,24 +56,24 @@ x1g(1)=x1(1)
 !x1(9) =log(xmHplusbeta)! log(xmOHminbetainitial)      ! initial guess for xmNaalpha
 !x1g(9) = x1(9)
 
-print*,'in:alpha',exp(x1(1)),ratiopol,exp(x1(1)),exp(x1(2)),exp(x1(3))!,exp(x1(10))
-print*,'in:beta',exp(x1(4)),exp(x1(5)),exp(x1(6)),exp(x1(7)),exp(x1(8))!,exp(x1(9))
+!print*,'in:alpha',exp(x1(1)),ratiopol,exp(x1(1)),exp(x1(2)),exp(x1(3))!,exp(x1(10))
+!print*,'in:beta',exp(x1(4)),exp(x1(5)),exp(x1(6)),exp(x1(7)),exp(x1(8))!,exp(x1(9))
 
 xSolventalpha=1-xmAalpha*Ma*vp*vsol-exp(x1(1))*Mb*vp*vsol-exp(x1(2))*vneg*vsol-exp(x1(3))*vneg*vsol
 xSolventalpha=xSolventalpha - xmHplusalpha  -  xmOHminalpha !
-xmSolventalpha=xSolventalpha/vs
+xmSolventalpha=xSolventalpha/vs !INITIAL SOLVENT
 
 xSolventbeta=1-exp(x1(4))*Ma*vp*vsol-exp(x1(5))*Mb*vp*vsol-exp(x1(6))*vneg*vsol-exp(x1(7))*vneg*vsol
 xSolventbeta=xSolventbeta -  xmHplusalpha  -  xmOHminalpha !/(1+expmuHplus+expmuOhmin)
-xmSolventbeta=xSolventbeta/vs
+xmSolventbeta=xSolventbeta/vs !INITIAL SOLVENT
 
-print*,'solv',xSolventbeta,xSolventalpha
+!print*,'solv',xSolventbeta,xSolventalpha
 
 !print*,'Na_alfa', 'n_tot_alfa', 'EO/Na alfa', 'Na_beta-Na_alpha', 'n_tot_beta', 'EO/Na beta'
-call call_kinsol(x1, x1g, ier)
+call call_kinsol(x1, x1g, ier) !SEND TO SOLVE
 
-print*,'out:alpha',ratiopol,exp(x1(1)),exp(x1(2)),exp(x1(3))!,exp(x1(10))
-print*,'out:beta',exp(x1(4)),exp(x1(5)),exp(x1(6)),exp(x1(7))!,exp(x1(8)),exp(x1(9))
+!print*,'out:alpha',ratiopol,exp(x1(1)),exp(x1(2)),exp(x1(3))!,exp(x1(10))
+!print*,'out:beta',exp(x1(4)),exp(x1(5)),exp(x1(6)),exp(x1(7))!,exp(x1(8)),exp(x1(9))
 
 
 !checkresults=0.
@@ -85,13 +86,13 @@ print*,'out:beta',exp(x1(4)),exp(x1(5)),exp(x1(6)),exp(x1(7))!,exp(x1(8)),exp(x1
 !stop
 
 
-!if ((norma.lt.criterio).and.( checkresults.gt.tolerancia)) then ! encuentra solucion
+
 if (norma.lt.criterio) then ! encuentra solucion
-!print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes'
+
+
 !print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
-print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
-!print*,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!yes!!!!!!!!!!!!!!!!!!!!!!!!!!'
-!stop
+
+
 write(8000,*) exp(x1(1)),exp(x1(2)),exp(x1(3)), exp(x1(4)), exp(x1(5)),exp(x1(6)),exp(x1(7)),xmAalpha ,pKD,ratiopol,Ma,Mb,K0ANa&
         ,K0BCl,K0D,K0HB
 write(8001,*) conver,testconst_hb,testconst_as,conver_B,testconst_hb_b,testconst_as_B
@@ -101,10 +102,9 @@ write(8001,*) conver,testconst_hb,testconst_as,conver_B,testconst_hb_b,testconst
 
 
 ! Found a solution, save in arrays
-
 ! Solutions for next iteration
       
-      xmBalphainitial=exp(x1(1))! Ratio inicial alpha 1:1
+      xmBalphainitial=exp(x1(1))        !initial for next it 
       xmNaalphainitial=exp(x1(2))
       xmClalphainitial=exp(x1(3))     !xNabeta  inicial
 
@@ -112,7 +112,7 @@ write(8001,*) conver,testconst_hb,testconst_as,conver_B,testconst_hb_b,testconst
       xmBbetainitial=exp(x1(5)) !xratioeobeta inicial 
       xmNabetainitial=exp(x1(6))
       xmClbetainitial=exp(x1(7))
-! save arrays
+
 
       xmBalpha = exp(x1(1))
       xmNaalpha= exp(x1(2))
@@ -167,7 +167,7 @@ write(8001,*) conver,testconst_hb,testconst_as,conver_B,testconst_hb_b,testconst
 
       arraypoltot(1,yes)=(arraymA(1,yes)+arraymB(1,yes))
       arraypoltot(2,yes)=(arraymA(2,yes)+arraymB(2,yes))
-     
+    
 
       arrayratioBA(1,yes)=arraymB(1,yes)/arraymA(1,yes)
       arrayratioBA(2,yes)=arraymB(2,yes)/arraymA(2,yes)
